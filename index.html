@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>2-bed flat, London — Application</title>
+<style>
+  :root {
+    --ink: #1f2420;
+    --ink-soft: #4b5148;
+    --paper: #faf8f4;
+    --line: #d9d4c8;
+    --green: #2f4538;
+    --green-dark: #202f26;
+    --brass: #a9843f;
+    --error: #b23b2e;
+    --ok: #2f4538;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+  }
+  .wrap {
+    max-width: 620px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+  header {
+    border-bottom: 2px solid var(--green);
+    padding-bottom: 20px;
+    margin-bottom: 32px;
+  }
+  .eyebrow {
+    font-size: 13px;
+    color: var(--brass);
+    letter-spacing: 0.02em;
+    margin: 0 0 6px;
+  }
+  h1 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-weight: 400;
+    font-size: 30px;
+    margin: 0 0 10px;
+    color: var(--green-dark);
+  }
+  .facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 18px;
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+  .facts span { white-space: nowrap; }
+  .intro {
+    font-size: 15px;
+    color: var(--ink-soft);
+    margin-bottom: 36px;
+    max-width: 54ch;
+  }
+  fieldset {
+    border: none;
+    padding: 0;
+    margin: 0 0 30px;
+  }
+  legend {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 17px;
+    color: var(--green-dark);
+    margin-bottom: 14px;
+    padding: 0;
+  }
+  .field { margin-bottom: 16px; }
+  .row2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  label {
+    display: block;
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-bottom: 5px;
+  }
+  input, textarea, select {
+    width: 100%;
+    font-size: 15px;
+    font-family: inherit;
+    color: var(--ink);
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    padding: 10px 12px;
+  }
+  input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: var(--green);
+    box-shadow: 0 0 0 1px var(--green);
+  }
+  textarea { resize: vertical; min-height: 80px; }
+  .err { font-size: 12px; color: var(--error); margin-top: 4px; display: none; }
+  .field.invalid input, .field.invalid textarea, .field.invalid select {
+    border-color: var(--error);
+  }
+  .field.invalid .err { display: block; }
+  button[type="submit"] {
+    width: 100%;
+    padding: 14px;
+    background: var(--green);
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    font-size: 15px;
+    cursor: pointer;
+  }
+  button[type="submit"]:hover { background: var(--green-dark); }
+  button[type="submit"]:disabled { opacity: 0.6; cursor: default; }
+  .status {
+    margin-top: 14px;
+    font-size: 14px;
+    text-align: center;
+  }
+  .status.err { color: var(--error); }
+  .done {
+    display: none;
+    text-align: center;
+    padding: 60px 0;
+  }
+  .done h2 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-weight: 400;
+    color: var(--green-dark);
+    font-size: 24px;
+  }
+  .done p { color: var(--ink-soft); }
+
+  .gate {
+    text-align: center;
+    padding: 8px 0 12px;
+  }
+  .gate p.lead {
+    font-size: 15px;
+    color: var(--ink-soft);
+    max-width: 50ch;
+    margin: 0 auto 28px;
+  }
+  .pay-btn {
+    display: inline-block;
+    width: 100%;
+    padding: 14px;
+    background: var(--brass);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 3px;
+    font-size: 15px;
+    font-weight: 600;
+    box-sizing: border-box;
+  }
+  .pay-btn:hover { opacity: 0.92; }
+  .pay-note {
+    font-size: 13px;
+    color: var(--ink-soft);
+    max-width: 48ch;
+    margin: 14px auto 0;
+    line-height: 1.6;
+  }
+  .gate-confirm {
+    margin-top: 30px;
+    padding-top: 26px;
+    border-top: 1px solid var(--line);
+  }
+  .gate-confirm label {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--ink);
+    text-align: left;
+    cursor: pointer;
+  }
+  .gate-confirm input[type="checkbox"] {
+    width: auto;
+    margin-top: 3px;
+  }
+  #continueBtn {
+    width: 100%;
+    padding: 14px;
+    margin-top: 16px;
+    background: var(--green);
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    font-size: 15px;
+    cursor: pointer;
+  }
+  #continueBtn:disabled { opacity: 0.5; cursor: default; }
+  #continueBtn:not(:disabled):hover { background: var(--green-dark); }
+
+  .notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: #f2ece0;
+    border: 1px solid var(--brass);
+    border-radius: 4px;
+    padding: 14px 16px;
+    margin-bottom: 28px;
+    font-size: 14px;
+    color: var(--ink);
+    line-height: 1.5;
+  }
+  .notice .icon {
+    color: var(--brass);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .notice strong { color: var(--green-dark); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <p class="eyebrow">To let</p>
+    <h1>2-bedroom flat, London</h1>
+    <div class="facts">
+      <span>2 bedrooms</span>
+      <span>1 bathroom</span>
+      <span>1 living room</span>
+    </div>
+  </header>
+
+  <div class="notice">
+    <span class="icon">£</span>
+    <span><strong>Payment required to apply.</strong> A £50 refundable holding deposit must be paid before your application can be submitted. I ask for this because I want applicants who are serious about renting the property, not just browsing — it's deducted from your first month's rent if accepted, or refunded in full if not. Applications submitted without payment will not be reviewed.</span>
+  </div>
+
+  <div class="gate" id="gate" style="display:none;">
+    <p class="intro" style="margin-bottom: 8px;">One last step — pay the £50 holding deposit to submit your application.</p>
+    <p class="lead">I ask for this deposit before finalising applications because it's the best way to make sure I'm hearing from people who are genuinely serious about renting this property, rather than casual enquiries. It goes toward your first month's rent if your application is successful, or is refunded in full if it isn't. Applications that reach me without payment will be ignored.</p>
+
+    <a class="pay-btn" href="https://buy.stripe.com/6oUfZhgtudVQb7T6zZ3Nm00" target="_blank" rel="noopener">Pay £50 holding deposit</a>
+    <p class="pay-note">Handled securely by Stripe. £50 is deducted from your first month's rent if you're offered the tenancy, and refunded in full if you're not.</p>
+
+    <div class="gate-confirm">
+      <label>
+        <input type="checkbox" id="paidConfirm" />
+        I've completed the £50 payment above
+      </label>
+      <button type="button" id="continueBtn" disabled>Submit application</button>
+    </div>
+  </div>
+
+  <p class="intro" id="formIntro">Fill in the form below. You'll need to pay the £50 holding deposit before your application is submitted — this is so I only hear from serious applicants.</p>
+
+  <form id="appForm" novalidate>
+
+    <fieldset>
+      <legend>About you</legend>
+      <div class="row2">
+        <div class="field" data-field="fullName">
+          <label for="fullName">Full name</label>
+          <input type="text" id="fullName" name="fullName" placeholder="Jamie Okafor" />
+          <p class="err">Enter your full name.</p>
+        </div>
+        <div class="field" data-field="phone">
+          <label for="phone">Phone number</label>
+          <input type="tel" id="phone" name="phone" placeholder="07123 456789" />
+          <p class="err">Enter a phone number.</p>
+        </div>
+      </div>
+      <div class="field" data-field="email">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="jamie@email.com" />
+        <p class="err">Enter a valid email address.</p>
+      </div>
+      <div class="field" data-field="currentAddress">
+        <label for="currentAddress">Current address</label>
+        <input type="text" id="currentAddress" name="currentAddress" placeholder="Where you live now" />
+        <p class="err">Enter your current address.</p>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Household</legend>
+      <div class="row2">
+        <div class="field" data-field="occupants">
+          <label for="occupants">Number of occupants</label>
+          <input type="number" id="occupants" name="occupants" min="1" placeholder="2" />
+          <p class="err">Enter the number of people moving in.</p>
+        </div>
+        <div class="field" data-field="moveInDate">
+          <label for="moveInDate">Preferred move-in date</label>
+          <input type="date" id="moveInDate" name="moveInDate" />
+          <p class="err">Choose a preferred move-in date.</p>
+        </div>
+      </div>
+      <div class="row2">
+        <div class="field" data-field="pets">
+          <label for="pets">Pets</label>
+          <select id="pets" name="pets">
+            <option value="">Select</option>
+            <option value="No pets">No pets</option>
+            <option value="Yes, one small pet">Yes, one small pet</option>
+            <option value="Yes, multiple pets">Yes, multiple pets</option>
+          </select>
+          <p class="err">Let us know about pets.</p>
+        </div>
+        <div class="field" data-field="smoker">
+          <label for="smoker">Smoker</label>
+          <select id="smoker" name="smoker">
+            <option value="">Select</option>
+            <option value="No">No</option>
+            <option value="Yes">Yes</option>
+          </select>
+          <p class="err">Let us know if you smoke.</p>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Employment and income</legend>
+      <div class="row2">
+        <div class="field" data-field="employer">
+          <label for="employer">Occupation and employer</label>
+          <input type="text" id="employer" name="employer" placeholder="Nurse, NHS" />
+          <p class="err">Enter your occupation and employer.</p>
+        </div>
+        <div class="field" data-field="income">
+          <label for="income">Monthly income (take-home)</label>
+          <input type="text" id="income" name="income" placeholder="£2,400" />
+          <p class="err">Enter your monthly take-home income.</p>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Reference</legend>
+      <div class="row2">
+        <div class="field" data-field="refName">
+          <label for="refName">Reference name</label>
+          <input type="text" id="refName" name="refName" placeholder="Previous landlord or employer" />
+          <p class="err">Enter a reference name.</p>
+        </div>
+        <div class="field" data-field="refContact">
+          <label for="refContact">Reference phone or email</label>
+          <input type="text" id="refContact" name="refContact" placeholder="Contact details" />
+          <p class="err">Enter reference contact details.</p>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Anything else</legend>
+      <div class="field" data-field="message">
+        <label for="message">Tell us a bit about yourself, or ask a question</label>
+        <textarea id="message" name="message" placeholder="Optional"></textarea>
+      </div>
+    </fieldset>
+
+    <button type="submit" id="submitBtn">Continue to payment</button>
+    <p class="status" id="statusMsg"></p>
+  </form>
+
+  <div class="done" id="doneMsg">
+    <h2>Application received</h2>
+    <p>Thanks — I have your details and will be in touch if it's a good fit.</p>
+  </div>
+
+</div>
+
+<script>
+const FORM_ENDPOINT = "https://formspree.io/f/mljenvro";
+
+const form = document.getElementById('appForm');
+const submitBtn = document.getElementById('submitBtn');
+const statusMsg = document.getElementById('statusMsg');
+const doneMsg = document.getElementById('doneMsg');
+
+const gate = document.getElementById('gate');
+const formIntro = document.getElementById('formIntro');
+const paidConfirm = document.getElementById('paidConfirm');
+const continueBtn = document.getElementById('continueBtn');
+
+const requiredFields = [
+  'fullName','email','phone','currentAddress','occupants','moveInDate',
+  'pets','smoker','employer','income','refName','refContact'
+];
+
+function emailValid(v) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+}
+
+function validate() {
+  let valid = true;
+  requiredFields.forEach(function(name) {
+    const el = form.elements[name];
+    const fieldWrap = form.querySelector('[data-field="' + name + '"]');
+    let ok = String(el.value || '').trim().length > 0;
+    if (name === 'email' && ok) ok = emailValid(el.value.trim());
+    if (name === 'occupants' && ok) ok = Number(el.value) > 0;
+    if (!ok) {
+      valid = false;
+      fieldWrap.classList.add('invalid');
+    } else {
+      fieldWrap.classList.remove('invalid');
+    }
+  });
+  return valid;
+}
+
+form.addEventListener('submit', function(e) {
+  e.preventDefault();
+  statusMsg.textContent = '';
+  statusMsg.className = 'status';
+
+  if (!validate()) {
+    statusMsg.textContent = 'Please fill in the highlighted fields.';
+    statusMsg.classList.add('err');
+    return;
+  }
+
+  form.style.display = 'none';
+  formIntro.style.display = 'none';
+  gate.style.display = 'block';
+  gate.scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+
+paidConfirm.addEventListener('change', function() {
+  continueBtn.disabled = !paidConfirm.checked;
+});
+
+continueBtn.addEventListener('click', async function() {
+  const formData = new FormData(form);
+
+  continueBtn.disabled = true;
+  continueBtn.textContent = 'Submitting…';
+
+  try {
+    const response = await fetch(FORM_ENDPOINT, {
+      method: 'POST',
+      body: formData,
+      headers: { 'Accept': 'application/json' }
+    });
+    if (!response.ok) throw new Error('Submission failed');
+    gate.style.display = 'none';
+    doneMsg.style.display = 'block';
+  } catch (err) {
+    statusMsg.textContent = 'Something went wrong submitting your application. Please try again.';
+    statusMsg.classList.add('err');
+    continueBtn.disabled = false;
+    continueBtn.textContent = 'Submit application';
+  }
+});
+
+requiredFields.forEach(function(name) {
+  const el = form.elements[name];
+  el.addEventListener('input', function() {
+    const fieldWrap = form.querySelector('[data-field="' + name + '"]');
+    fieldWrap.classList.remove('invalid');
+  });
+});
+</script>
+
+</body>
+</html>
